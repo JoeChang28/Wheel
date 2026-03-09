@@ -958,17 +958,17 @@ Annie
           </div>
 
           <div class="field" style="grid-column: 1 / -1; margin-top: 10px;">
-            <div class="field-label">內定中獎名單 (選填)</div>
+            <div class="field-label">內定中獎名單（選填）</div>
             <div class="subtitle" style="text-align:center; margin-top:-6px; margin-bottom:4px;">點選名字設定特定獎項，預設為隨機分配</div>
             <div id="prize-mapping-area" class="mapping-grid">
               </div>
           </div>
 
           <div class="field" style="grid-column: 1 / -1; margin-top: 10px;">
-            <div class="field-label">最後壓軸獎項 (選填)</div>
+            <div class="field-label">最後壓軸獎項（選填）</div>
             <div class="subtitle" style="text-align:center; margin-top:-6px; margin-bottom:14px;">不管名單順序為何，此獎項強制安排在「最後一位」抽出</div>
             <div style="display:flex; justify-content:center;">
-               <button type="button" id="btn-set-last-prize" class="prize-mapping-btn" style="max-width:320px; padding: 12px 28px; font-size:16px; border-radius:999px;">🎲 隨機 (無指定)</button>
+               <button type="button" id="btn-set-last-prize" class="prize-mapping-btn" style="max-width:320px; padding: 12px 28px; font-size:16px; border-radius:999px;">🎲 隨機（無指定）</button>
             </div>
           </div>
 
@@ -1248,7 +1248,7 @@ Annie
     });
   }
 
-  // 更新指定獎項與壓軸 UI，加入庫存計算防呆機制
+  // 核心更新：獎項庫存控管邏輯
   function updatePrizeMappingUI() {
     const names = namesInput.value.split('\n').map(v => v.trim()).filter(Boolean);
     const currentPrizes = prizesInput.value.split('\n').map(v => v.trim()).filter(Boolean);
@@ -1319,7 +1319,7 @@ Annie
       btnSetLastPrize.textContent = `🎯 壓軸：${state.lastPrize}`;
       btnSetLastPrize.classList.add('has-value');
     } else {
-      btnSetLastPrize.textContent = '🎲 隨機 (無指定)';
+      btnSetLastPrize.textContent = '🎲 隨機（無指定）';
       btnSetLastPrize.classList.remove('has-value');
     }
     btnSetLastPrize.onclick = () => openPrizeModal('lastPrize');
@@ -1345,7 +1345,7 @@ Annie
     // 加入「隨機/無指定」選項
     const randomBtn = document.createElement('button');
     randomBtn.className = 'prize-list-btn';
-    randomBtn.textContent = target === 'lastPrize' ? '🎲 無指定 （隨機安排）' : '🎲 隨機分配';
+    randomBtn.textContent = target === 'lastPrize' ? '🎲 無指定（隨機安排）' : '🎲 隨機分配';
     randomBtn.onclick = () => {
       if (target === 'lastPrize') state.lastPrize = 'none';
       else state.riggedMap[target] = 'random';
@@ -1385,11 +1385,11 @@ Annie
         btn.classList.add('selected');
       }
 
-      // 如果是「對人指定」，且名額被別人選光了(remaining <= 0)，且也不是自己目前選的，就顯示(已無名額)且無法點擊
+      // 如果是「對人指定」，且名額被別人選光了(remaining <= 0)，且也不是自己目前選的，就顯示（已無名額）且無法點擊
       // 如果是「壓軸設定」，不用檢查 remaining，因為它不消耗獎項實體，只是決定該獎項在哪開出
       if (target !== 'lastPrize' && remaining <= 0 && !isSelected) {
         btn.disabled = true;
-        btn.textContent = `${prize} （已無名額）`;
+        btn.textContent = `${prize}（已無名額）`;
       } else {
         btn.textContent = prize;
         btn.onclick = () => {
@@ -1963,7 +1963,6 @@ Annie
     let currentRiggedMap = { ...state.riggedMap };
     let rigErrors = [];
 
-    // 將壓軸獎項的玩家抽換到最後一個位置
     if (state.lastPrize !== 'none' && prizes.includes(state.lastPrize)) {
       let assignedPlayer = names.find(n => currentRiggedMap[n] === state.lastPrize);
 
@@ -2029,7 +2028,7 @@ Annie
     }
 
     if (rigErrors.length > 0) {
-      showToast('提示：部分指定條件因衝突而無法成立 (' + rigErrors[0] + ')');
+      showToast('提示：部分指定條件因衝突而無法成立（' + rigErrors[0] + '）');
     }
 
     availablePrizes.sort(() => Math.random() - 0.5);
