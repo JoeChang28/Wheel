@@ -1345,7 +1345,7 @@ Annie
     // 加入「隨機/無指定」選項
     const randomBtn = document.createElement('button');
     randomBtn.className = 'prize-list-btn';
-    randomBtn.textContent = target === 'lastPrize' ? '🎲 無指定 (隨機安排)' : '🎲 隨機分配';
+    randomBtn.textContent = target === 'lastPrize' ? '🎲 無指定 （隨機安排）' : '🎲 隨機分配';
     randomBtn.onclick = () => {
       if (target === 'lastPrize') state.lastPrize = 'none';
       else state.riggedMap[target] = 'random';
